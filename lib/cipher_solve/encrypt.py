@@ -13,4 +13,4 @@ text = open('text.txt').read().lower()
 
 trans = string.maketrans(abc, key)
 
-print text.translate(trans)
+print(text.translate(trans))
