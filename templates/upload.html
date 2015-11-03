@@ -1,0 +1,24 @@
+
+<div class="am-form" id="upload-box">
+    <form id="file_upload" enctype="multipart/form-data" class="am-form" method="post" action="${ url_for('j_upload') }">
+        <div class="am-form-group am-form-file" style="margin-bottom:0px">
+            <button type="button" class="am-btn am-btn-danger am-btn-sm">
+            <i class="am-icon-cloud-upload"></i> 选择要上传的文件</button>
+            <input id="doc-form-file" name="files[]" type="file">
+        </div>
+        <div id="file-list"></div>
+    </form>
+    <ul>
+        <li v-for="item in file_items">
+            <p><a href="/static/uploads/{{item.filename}}" target="_blank">{{ item.original_filename }}</a></p>
+            <p>{{ item.username }} {{ item.time }}</p>
+        </li>
+    </ul>
+</div>
+
+<%block name="script">
+<script>
+    (function() {
+	})();
+</script>
+</%block>

@@ -18,7 +18,7 @@ class ChatLog(BaseModel):
         return cls.create(user=user, to_user=to_user, txt=txt, time=int(time.time()))
 
     def time_human(self):
-        return datetime.datetime.fromtimestamp(self.time).strftime('%Y-%M-%d %H:%M:%S')
+        return datetime.datetime.fromtimestamp(self.time).strftime('%Y-%m-%d %H:%M:%S')
 
     @classmethod
     def get_list(cls):
