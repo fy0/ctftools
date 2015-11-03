@@ -1,0 +1,19 @@
+<div class="am-form">
+    <p>地址：http://${req.request.host}/x?c=</p>
+    <ul id="xss_info">
+
+    </ul>
+</div>
+
+<%block name="script">
+<script>
+    (function() {
+
+        setInterval(function() {
+            $.get("${ url_for("xss_ret") }", function(ret) {
+                $("#xss_info").html(ret);
+            });
+        }, 2000);
+	})();
+</script>
+</%block>

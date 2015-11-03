@@ -1,0 +1,59 @@
+
+<%inherit file="base.html"/>
+
+<%block name="head">
+    <style>
+        .page-title {
+            font-weight: bold;
+        }
+    </style>
+</%block>
+
+<div class="am-tabs" data-am-tabs="{noSwipe: 1}" id="doc-tab-demo-1">
+        <ul class="am-tabs-nav am-nav am-nav-tabs">
+            <li class="am-active">
+                <a href="javascript: void(0)">
+                    编解码工具
+                </a>
+            </li>
+            <li class="">
+                <a href="javascript: void(0)">
+                    Python 代码压缩
+                </a>
+            </li>
+            <li class="">
+                <a href="javascript: void(0)">
+                    速查板
+                </a>
+            </li>
+            <li class="">
+                <a href="javascript: void(0)">
+                    XSS
+                </a>
+            </li>
+        </ul>
+        <div class="am-tabs-bd">
+            <div class="am-tab-panel am-active">
+                <%include file="decode.html"/>
+            </div>
+            <div class="am-tab-panel">
+                <%include file="pycode.html"/>
+            </div>
+            <div class="am-tab-panel">
+                <%include file="cheatbox.html"/>
+            </div>
+            <div class="am-tab-panel">
+                <%include file="xss.html"/>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<%block name="script">
+<script>
+    (function() {
+        ;
+	})();
+</script>
+</%block>

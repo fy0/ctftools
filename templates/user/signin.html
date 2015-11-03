@@ -1,0 +1,23 @@
+
+<%inherit file="../base.html"/>
+
+<div class="container">
+    <form method="post" class="am-form">
+        ${xsrf_token}
+        <label for="username">帐号:</label>
+        <input type="text" name="username" id="username" value="">
+        <br>
+        <label for="password">密码:</label>
+        <input type="password" name="password" id="password" value="">
+        <br>
+        <label for="remember">
+            <input id="remember" type="checkbox" checked>
+            记住密码
+        </label>
+        <br/>
+
+        <div>
+            <input class="am-btn am-btn-primary" type="submit" name="" value="登 录">
+        </div>
+    </form>
+</div>

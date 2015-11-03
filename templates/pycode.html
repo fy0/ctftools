@@ -1,0 +1,44 @@
+<div class="am-form" id="pycode_box">
+
+    <div class="am-form-group">
+        <label for="pc_src">源码</label>
+        <textarea id="pc_src" debounce="500" v-model="source" rows="7"></textarea>
+    </div>
+
+    <div class="am-form-group">
+        <label for="pc_zlib">变形（py2）</label>
+        <textarea id="pc_zlib" debounce="500" rows="7">{{ pack }}</textarea>
+    </div>
+
+    <div class="am-form-group">
+        <label for="pc_oneline">一句话（py2）</label>
+        <textarea id="pc_oneline" debounce="500" rows="7">{{ one_line }}</textarea>
+    </div>
+</div>
+
+
+<%block name="script">
+<script>
+    (function() {
+        var the_data = {};
+
+        var demo = new Vue({
+            el: '#pycode_box',
+            data: {
+                source: the_data.source,
+                pack: the_data.pack,
+                one_line: the_data.one_line,
+            },
+            watch: {
+                source: function (val, oldVal) {
+                    self = this;
+                    $.post("${ url_for('j_pycode') }", {txt: val}, function(ret) {
+                        self.pack = ret.pack;
+                        self.one_line = ret.one_line;
+                    });
+                },
+            },
+        })
+	})();
+</script>
+</%block>

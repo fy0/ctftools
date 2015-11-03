@@ -1,0 +1,96 @@
+<!doctype html>
+<% import config %>
+<html>
+<head>
+    % if page_title:
+    <title>${page_title|h}</title>
+    % else:
+    <title>${config.TITLE|h}</title>
+    % endif
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+    <!-- Set render engine for 360 browser -->
+    <meta name="renderer" content="webkit">
+
+    <!-- No Baidu Siteapp-->
+    <meta http-equiv="Cache-Control" content="no-siteapp"/>
+
+    <link rel="stylesheet" href="${ static('css/amazeui.min.css') }">
+    <link rel="stylesheet" href="${ static('css/style.css') }">
+    <script src="${ static('js/jquery.min.js') }"></script>
+    <script src="${ static('js/amazeui.min.js') }"></script>
+    <script src="${ static('js/amazeui.widgets.helper.min.js') }"></script>
+    <script src="${ static('js/handlebars.min.js') }"></script>
+    <script src="${ static('js/vue.min.js') }"></script>
+    <script src="${ static('js/app.js') }"></script>
+    <%block name="head"/>
+</head>
+
+<body class="am-with-topbar-fixed-top">
+    <header class="am-topbar am-topbar-fixed-top">
+        <div class="am-container">
+            <h1 class="am-topbar-brand">
+                <a href="${url_for('index')}">${config.TITLE}</a>
+            </h1>
+
+            <button class="am-topbar-btn am-topbar-toggle am-btn am-btn-sm am-btn-secondary am-show-sm-only"
+                    data-am-collapse="{target: '#collapse-head'}"><span class="am-sr-only">导航切换</span> <span
+                    class="am-icon-bars"></span></button>
+
+                % if req.current_user():
+                <div class="am-topbar-right">
+                    <a href="${url_for('signout')}">
+                        <span class="am-btn am-btn-secondary am-topbar-btn am-btn-sm"><span class="am-icon-pencil"></span>
+                            注销
+                        </span>
+                    </a>
+                </div>
+                % else:
+                <div class="am-topbar-right">
+                    <a href="${url_for('signup')}">
+                        <span class="am-btn am-btn-secondary am-topbar-btn am-btn-sm"><span class="am-icon-pencil"></span>
+                            注册
+                        </span>
+                    </a>
+                </div>
+
+                <div class="am-topbar-right">
+                    <a href="${url_for('signin')}">
+                        <span class="am-btn am-btn-primary am-topbar-btn am-btn-sm"><span class="am-icon-user"></span> 登录
+                        </span>
+                    </a>
+                </div>
+                % endif
+            </div>
+        </div>
+    </header>
+
+    <div id="main" class="am-g am-container">
+        <div class="container">
+            % for msg in get_messages():
+                % if msg.tag in ['warning', 'success']:
+                    <div class="am-alert am-alert-{{ msg.tags}}">
+                        ${msg.txt}
+                    </div>
+                % elif msg.tag in ['info', 'debug']:
+                    <div class="am-alert am-alert-secondary">
+                        ${msg.txt}
+                    </div>
+                % elif msg.tag in ['error']:
+                    <div class="am-alert am-alert-danger ">
+                        ${msg.txt}
+                    </div>
+                % endif
+            % endfor
+
+            ${self.body()}
+        </div>
+    </div>
+
+    <%block name="script"/>
+</body>
+</html>

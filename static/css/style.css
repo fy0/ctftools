@@ -1,0 +1,27 @@
+
+.container {
+    margin-top: 10px;
+}
+
+.ui-green {
+    color: green;
+}
+
+.ui-red {
+    color: red;
+}
+
+.footer {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  z-index:1000;
+}
+
+.footer p {
+  margin: 0;
+  color: #7f8c8d;
+  padding: 15px 0;
+  text-align: center;
+  background: #2d3e50;
+}
