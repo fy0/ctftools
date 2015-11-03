@@ -1,0 +1,31 @@
+
+<div class="am-form" id="chat_box">
+    <div v-for="item in chat_items">
+        <div class="am-g" style="padding-right: 1.5em;">
+            <div class="am-u-sm-11">
+                <div class="am-panel am-panel-default" style="min-height: 5em">
+                    <div class="am-panel-bd">
+                        <p><small>{{ item.time }}</small></p>
+                        <pre style="border: none;background: none;padding: 0;margin: 0;">{{ item.txt }}</pre>
+                    </div>
+                </div>
+            </div>
+            <div class="am-u-sm-1">
+                {{ item.username }}<br>
+            </div>
+        </div>
+    </div>
+
+    <div class="am-g" style="padding-right: 1.5em;">
+        <div id="msg_text_box" class="am-u-sm-11"><textarea rows="9" id="msg_text"></textarea></div>
+        <a id="btn_chat_send" class="am-u-sm-1 am-btn am-btn-secondary" style="padding: 10px;">发送</a>
+    </div>
+
+</div>
+
+<%block name="script">
+<script>
+    (function() {
+	})();
+</script>
+</%block>

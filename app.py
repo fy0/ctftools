@@ -10,10 +10,11 @@ import config
 import view.views
 import model.models
 from view import route
+from view.chat import chat_route
 
 
 application = tornado.web.Application(
-    route.urls,
+    route.urls + chat_route.urls,
     debug=config.DEBUG,
     static_path=path.join(path.dirname(path.abspath(__file__)), 'static'),
     template_path="templates",

@@ -8,7 +8,6 @@
 <%block name="script">
 <script>
     (function() {
-
         setInterval(function() {
             $.get("${ url_for("xss_ret") }", function(ret) {
                 $("#xss_info").html(ret);

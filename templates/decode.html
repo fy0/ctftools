@@ -31,8 +31,8 @@
     </div>
 
     <div class="am-form-group">
-        <label for="dc_mos">mos</label>
-        <textarea id="dc_mos" v-model="mos"></textarea>
+        <label for="dc_mos">morse</label>
+        <textarea id="dc_mos" v-model="morse"></textarea>
     </div>
 
     <div class="am-form-group">
@@ -48,7 +48,7 @@
     (function() {
         var the_data = {};
         var last_ret = {};
-        var items = ["source", "base64", "hex", "hex2", "utf7", "quote", "md5", "mos"];
+        var items = ["source", "base64", "hex", "hex2", "utf7", "quote", "md5", "morse"];
 
         $.mypost = function(self, url, key, val) {
             params = {}
@@ -75,7 +75,7 @@
                 hex2: the_data.hex2,
                 utf7: the_data.utf7,
                 quote: the_data.quote,
-                mos: the_data.mos,
+                morse: the_data.morse,
                 md5: the_data.md5,
             },
             watch: {
@@ -94,7 +94,7 @@
                 hex: function (val, oldVal) {
                     key = "hex";
                     if (val != last_ret[key]) {
-                        $.mypost(this, "${ url_for('j_decode_base64') }", key, val);
+                        $.mypost(this, "${ url_for('j_decode_hex') }", key, val);
                     }
                 },
                 hex2: function (val, oldVal) {

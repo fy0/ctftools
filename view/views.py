@@ -6,3 +6,4 @@ import view.decode
 import view.pycode
 import view.xss
 import view.substitution
+import view.chat
