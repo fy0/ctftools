@@ -1,4 +1,5 @@
 # coding:utf-8
+import codecs
 
 import re
 import base64
@@ -35,6 +36,12 @@ class DecodeSource(AjaxLoginView):
         try: quote_out = unquote(src)
         except: quote_out = '无法解析'
 
+        try: rot13_out = codecs.decode(src, 'rot13')
+        except: rot13_out = '无法解析'
+
+        try: unicode_escape_out = codecs.decode(src, 'unicode_escape')
+        except: unicode_escape_out = '无法解析'
+
         return {
             "source": src,
             "base64": base64_out,
@@ -42,6 +49,8 @@ class DecodeSource(AjaxLoginView):
             "hex2": hex2_out,
             "utf7": utf7_out,
             'quote': quote_out,
+            'rot13': rot13_out,
+            'unicode_escape': unicode_escape_out,
             "code": 0,
         }
 

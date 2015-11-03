@@ -26,7 +26,17 @@
     </div>
 
     <div class="am-form-group">
-        <label for="dc_quote">转义</label>
+        <label for="dc_rot13">rot13</label>
+        <textarea id="dc_rot13" v-model="rot13"></textarea>
+    </div>
+
+    <div class="am-form-group">
+        <label for="dc_unicode_escape">unicode_escape</label>
+        <textarea id="dc_unicode_escape" v-model="unicode_escape"></textarea>
+    </div>
+
+    <div class="am-form-group">
+        <label for="dc_quote">URL转义</label>
         <textarea id="dc_quote" v-model="quote"></textarea>
     </div>
 
@@ -43,7 +53,7 @@
     (function() {
         var the_data = {};
         var last_ret = {};
-        var items = ["source", "base64", "hex", "hex2", "utf7", "quote", "md5", "morse"];
+        var items = ["source", "base64", "hex", "hex2", "utf7", "quote", "md5", "rot13", "unicode_escape", "morse"];
 
         $.mypost = function(self, url, key, val) {
             params = {}
@@ -72,6 +82,8 @@
                 quote: the_data.quote,
                 morse: the_data.morse,
                 md5: the_data.md5,
+                rot13: the_data.rot13,
+                unicode_escape: the_data.unicode_escape,
             },
             watch: {
                 source: function (val, oldVal) {
