@@ -1,0 +1,87 @@
+<div class="am-form" id="decode_test_box">
+
+    <div class="am-form-group">
+        <label for="dc_src">密文</label>
+        <textarea id="dc_src" debounce="500" v-model="source"></textarea>
+    </div>
+
+    <div class="am-form-group">
+        <label for="dc_b64">base64</label>
+        <textarea id="dc_b64" debounce="500" v-model="base64"></textarea>
+    </div>
+
+    <div class="am-form-group">
+        <label for="dc_hex">hex</label>
+        <textarea id="dc_hex" v-model="hex"></textarea>
+    </div>
+
+    <div class="am-form-group">
+        <label for="dc_hex2">hex2</label>
+        <textarea id="dc_hex2" v-model="hex2"></textarea>
+    </div>
+
+    <div class="am-form-group">
+        <label for="dc_utf7">utf7</label>
+        <textarea id="dc_utf7" v-model="utf7"></textarea>
+    </div>
+
+    <div class="am-form-group">
+        <label for="dc_quote">转义</label>
+        <textarea id="dc_quote" v-model="quote"></textarea>
+    </div>
+
+    <!--<div class="am-form-group">
+        <label for="dc_mos">morse</label>
+        <textarea id="dc_mos" v-model="morse"></textarea>
+    </div>-->
+
+</div>
+
+
+<%block name="script">
+<script>
+    (function() {
+        var the_data = {};
+        var last_ret = {};
+        var items = ["source", "base64", "hex", "hex2", "utf7", "quote", "md5", "morse"];
+
+        $.mypost = function(self, url, key, val) {
+            params = {}
+            params[key] = val;
+            $.post(url, params, function(ret) {
+                if (ret.code == 0)
+                    last_ret = ret;
+                else
+                    last_ret = {}
+                for (var i in items) {
+                    k = items[i];
+                    if (k != key) self[k] = ret[k];
+                }
+            });
+        }
+
+        var demo = new Vue({
+            el: '#decode_test_box',
+            async: false,
+            data: {
+                source: the_data.source,
+                base64: the_data.base64,
+                hex: the_data.hex,
+                hex2: the_data.hex2,
+                utf7: the_data.utf7,
+                quote: the_data.quote,
+                morse: the_data.morse,
+                md5: the_data.md5,
+            },
+            watch: {
+                source: function (val, oldVal) {
+                    key = "source";
+                    if (val != last_ret[key]) {
+                        $.mypost(this, "${ url_for('j_decode_test') }", key, val);
+                    }
+                }
+            },
+        })
+	})();
+</script>
+</%block>
