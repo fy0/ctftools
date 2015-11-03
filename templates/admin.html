@@ -1,0 +1,18 @@
+
+<div class="am-form">
+    <p><button id="btn-close-reg" class="am-btn am-btn-secondary">关闭注册</button></p>
+    <p><button id="btn-open-reg" class="am-btn am-btn-secondary">重开注册</button></p>
+</div>
+
+<%block name="script">
+<script>
+    (function() {
+        $("#btn-close-reg").click(function() {
+            $.post("${url_for('j_close_reg')}", function() {alert("OK")});
+        });
+        $("#btn-open-reg").click(function() {
+            $.post("${url_for('j_open_reg')}", function() {alert("OK")});
+        });
+	})();
+</script>
+</%block>

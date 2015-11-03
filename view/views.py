@@ -8,3 +8,4 @@ import view.xss
 import view.substitution
 import view.chat
 import view.decode_test
+import view.admin

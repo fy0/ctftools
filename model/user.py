@@ -13,7 +13,7 @@ def random_str(random_length=16):
     length = len(chars) - 1
     random = Random()
     for i in range(random_length):
-        str+=chars[random.randint(0, length)]
+        str += chars[random.randint(0, length)]
     return str
 
 
@@ -37,10 +37,9 @@ class User(BaseModel):
     class Meta:
         db_table = 'users'
 
-
     def is_admin(self):
         return self.level == USER_LEVEL.ADMIN
-        
+
     def refresh_key(self):
         self.key = random_str(32)
         self.key_time = int(time.time())
@@ -54,12 +53,12 @@ class User(BaseModel):
         level = USER_LEVEL.ADMIN if cls.count() == 0 else USER_LEVEL.NORMAL  # 首个用户赋予admin权限
         the_time = int(time.time())
         return cls.create(username=username, password=password_final, salt=salt, level=level, key=random_str(32),
-                          key_time = the_time, reg_time = the_time)
+                          key_time=the_time, reg_time=the_time)
 
     @classmethod
     def auth(cls, username, password):
         try:
-            u = cls.get(cls.username==username)
+            u = cls.get(cls.username == username)
         except DoesNotExist:
             return False
         password_md5 = md5(password.encode('utf-8')).hexdigest()
@@ -69,7 +68,7 @@ class User(BaseModel):
 
     @classmethod
     def exist(cls, username):
-        return cls.select().where(cls.username==username).exists()
+        return cls.select().where(cls.username == username).exists()
 
     @classmethod
     def get_by_key(cls, key):
@@ -87,4 +86,4 @@ class User(BaseModel):
 
     @classmethod
     def count(cls):
-        return cls.select(cls.level>0).count()
+        return cls.select(cls.level > 0).count()

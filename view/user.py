@@ -1,4 +1,5 @@
 # coding:utf-8
+import config
 
 from view import route, url_for, View, LoginView, NoLoginView
 from model.user import User
@@ -64,6 +65,10 @@ class SignUp(NoLoginView):
         if password != password_again:
             error = True
             self.messages.error("两次输入的密码不一致！")
+
+        if not config.ALLOW_REG:
+            error = True
+            self.messages.error("注册已经关闭")
 
         if not error:
             u = User.new(username, password)

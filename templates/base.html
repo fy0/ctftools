@@ -51,6 +51,7 @@
                     </a>
                 </div>
                 % else:
+                % if config.ALLOW_REG:
                 <div class="am-topbar-right">
                     <a href="${url_for('signup')}">
                         <span class="am-btn am-btn-secondary am-topbar-btn am-btn-sm"><span class="am-icon-pencil"></span>
@@ -58,6 +59,7 @@
                         </span>
                     </a>
                 </div>
+                % endif
 
                 <div class="am-topbar-right">
                     <a href="${url_for('signin')}">
