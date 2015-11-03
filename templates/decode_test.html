@@ -1,7 +1,7 @@
-<div class="am-form" id="decode_box">
+<div class="am-form" id="decode_test_box">
 
     <div class="am-form-group">
-        <label for="dc_src">原文</label>
+        <label for="dc_src">密文</label>
         <textarea id="dc_src" debounce="500" v-model="source"></textarea>
     </div>
 
@@ -30,15 +30,10 @@
         <textarea id="dc_quote" v-model="quote"></textarea>
     </div>
 
-    <div class="am-form-group">
+    <!--<div class="am-form-group">
         <label for="dc_mos">morse</label>
         <textarea id="dc_mos" v-model="morse"></textarea>
-    </div>
-
-    <div class="am-form-group">
-        <label for="dc_md5">md5</label>
-        <textarea id="dc_md5" v-model="md5"></textarea>
-    </div>
+    </div>-->
 
 </div>
 
@@ -66,7 +61,7 @@
         }
 
         var demo = new Vue({
-            el: '#decode_box',
+            el: '#decode_test_box',
             async: false,
             data: {
                 source: the_data.source,
@@ -82,39 +77,9 @@
                 source: function (val, oldVal) {
                     key = "source";
                     if (val != last_ret[key]) {
-                        $.mypost(this, "${ url_for('j_decode_source') }", key, val);
+                        $.mypost(this, "${ url_for('j_decode_test') }", key, val);
                     }
-                },
-                base64: function (val, oldVal) {
-                    key = "base64";
-                    if (val != last_ret[key]) {
-                        $.mypost(this, "${ url_for('j_decode_base64') }", key, val);
-                    }
-                },
-                hex: function (val, oldVal) {
-                    key = "hex";
-                    if (val != last_ret[key]) {
-                        $.mypost(this, "${ url_for('j_decode_hex') }", key, val);
-                    }
-                },
-                hex2: function (val, oldVal) {
-                    key = "hex2";
-                    if (val != last_ret[key]) {
-                        $.mypost(this, "${ url_for('j_decode_hex2') }", key, val);
-                    }
-                },
-                utf7: function (val, oldVal) {
-                    key = "utf7";
-                    if (val != last_ret[key]) {
-                        $.mypost(this, "${ url_for('j_decode_utf7') }", key, val);
-                    }
-                },
-                quote: function (val, oldVal) {
-                    key = "quote";
-                    if (val != last_ret[key]) {
-                        $.mypost(this, "${ url_for('j_decode_quote') }", key, val);
-                    }
-                },
+                }
             },
         })
 	})();

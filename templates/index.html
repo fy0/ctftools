@@ -13,7 +13,12 @@
         <ul class="am-tabs-nav am-nav am-nav-tabs">
             <li class="am-active">
                 <a href="javascript: void(0)">
-                    编解码工具
+                    文本编码
+                </a>
+            </li>
+            <li class="">
+                <a href="javascript: void(0)">
+                    猜测解码
                 </a>
             </li>
             <li class="">
@@ -28,17 +33,25 @@
             </li>
             <li class="">
                 <a href="javascript: void(0)">
-                    解替换密码
+                    替换密码
                 </a>
             <li class="">
                 <a href="javascript: void(0)">
                     XSS
                 </a>
             </li>
+            <li class="">
+                <a href="javascript: void(0)">
+                    交流
+                </a>
+            </li>
         </ul>
         <div class="am-tabs-bd">
             <div class="am-tab-panel am-active">
                 <%include file="decode.html"/>
+            </div>
+            <div class="am-tab-panel am-active">
+                <%include file="decode_test.html"/>
             </div>
             <div class="am-tab-panel">
                 <%include file="pycode.html"/>
@@ -51,6 +64,9 @@
             </div>
             <div class="am-tab-panel">
                 <%include file="xss.html"/>
+            </div>
+            <div class="am-tab-panel">
+                <%include file="chat.html"/>
             </div>
         </div>
     </div>
