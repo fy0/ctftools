@@ -1,6 +1,7 @@
 #!/usr/bin/python
 
 import copy
+import os
 import re
 from itertools import combinations
 
@@ -13,6 +14,7 @@ MAX_GOODNESS_LEVEL = 2  # 1-7
 MAX_BAD_WORDS_RATE = 0.06
 
 ABC = "abcdefghijklmnopqrstuvwxyz"
+file_path = os.path.dirname(__file__)
 
 
 class WordList:
@@ -25,7 +27,7 @@ class WordList:
 
         self.words = {}
         for goodness in range(MAX_GOODNESS_LEVEL):
-            for word in open("words/" + str(goodness) + ".txt"):
+            for word in open(os.path.join(file_path, "words/" + str(goodness) + ".txt")):
                 word = word.strip()
                 word_len = len(word)
                 properties = (word_len, len(set(word)))
@@ -136,10 +138,9 @@ class KeyFinder:
         return self.found_keys
 
 
-def main():
-    enc_text = open("encrypted.txt").read().lower()
+def decrypt(encrypt_txt):
+    enc_text = encrypt_txt.lower()
     enc_words = re.findall(r"[a-z']+", enc_text)
-
     # skip the words with apostrophs
     enc_words = [word for word in enc_words
                       if "'" not in word and
@@ -147,31 +148,11 @@ def main():
                 ]
     enc_words = enc_words[:200]
 
-    print("Loaded %d words in encrypted.txt, loading dicts" % len(enc_words))
-
     keys = KeyFinder(enc_words).find()
     if not keys:
         print("Key not founded, try to increase MAX_BAD_WORDS_RATE")
-    for key, bad_words in keys.items():
-        print("Possible key: %s, bad words:%d" % (key, bad_words))
     best_key = min(keys, key=keys.get)
     print("Best key: %s, bad_words %d" % (best_key, keys[best_key]))
     trans = maketrans(ABC, best_key)
-    decrypted = open("encrypted.txt").read().translate(trans)
-    try:
-        decryptedFile = open("decrypted.txt", "w")
-        try:
-            decryptedFile.write(decrypted)
-        finally:
-            decryptedFile.close()
-    except IOError:
-        print("[*] Decrypted text not saved")
-    print(decrypted)
-
-if __name__ == "__main__":
-    try:
-        #import cProfile
-        #cProfile.run('main()')
-        main()
-    except Exception as E:
-        print("Error: %s" % E)
+    decrypted = encrypt_txt.translate(trans)
+    return decrypted
