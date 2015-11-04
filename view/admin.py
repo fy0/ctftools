@@ -19,3 +19,12 @@ class Admin(AjaxLoginView):
     def post(self):
         config.ALLOW_REG = True
         self.finish({"code":0})
+
+
+@route('/j/admin/spec_save', name='j_admin_spec_save')
+class Admin(AjaxLoginView):
+    def post(self):
+        SERV_HOST = self.get_argument('SERV_HOST')
+        config.SPEC['SERV_HOST'] = SERV_HOST
+        config.spec_save()
+        self.finish({"code":0})

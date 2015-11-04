@@ -11,6 +11,16 @@
     color: red;
 }
 
+.pony-box > li {
+}
+
+.pony-box > li > div {
+    font-size: 12px;
+    padding: 1em;
+    margin: 0.5em;
+    border: 1px solid;
+}
+
 .footer {
   position: fixed;
   bottom: 0;

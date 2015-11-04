@@ -10,3 +10,4 @@ import view.chat
 import view.decode_test
 import view.admin
 import view.upload
+import view.key

