@@ -163,7 +163,7 @@ def rp():
     stat = os.stat('/etc/passwd')
 
     if stat.st_ctime > CTIME:
-         os.system(r'\cp -rf /root/passwd /etc/passwd')
+         os.system(r'cp -rf /root/passwd /etc/passwd')
 
 rp()</textarea>
     </div>

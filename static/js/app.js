@@ -46,6 +46,8 @@
                         }
                     } else if (info[0] == 'say_ret') {
                         chat_items.push(info[1]);
+                        $("#tab_talk").html("[*]交流");
+                        $(".am-active > #tab_talk").html("交流");
                     }
                 }
             };
@@ -53,6 +55,10 @@
             conn.onclose = function() {
                 log('Disconnected.');
                 conn = null;
+                auto_reconnect = function() {
+                    connect();
+                }
+                setTimeout(auto_reconnect, 5000);
             };
         };
 
@@ -87,6 +93,10 @@
                 $("#msg_text").val("");
             }
         });
+
+        $("#tab_talk").click(function() {
+            $(this).html("交流");
+        })
 
         connect();
 
