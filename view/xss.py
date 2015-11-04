@@ -11,7 +11,9 @@ xss_info = []
 @route('/x', name='j_xss')
 class OneLine(AjaxView):
     def get(self):
+        print(self.request.headers)
         txt = self.get_argument('c', '')
+        print(txt)
         xss_info.append([self.request.headers.get("Referer"), txt])
 
     post = get
