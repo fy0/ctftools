@@ -9,7 +9,7 @@ from tornado.web import asynchronous
 from tornado.concurrent import run_on_executor
 from concurrent.futures import ThreadPoolExecutor
 
-from lib.cipher_solve import decrypt
+from lib.cipher_solve.subsolve import do_solve
 from view import route, url_for, View, LoginView, AjaxLoginView, AjaxView
 
 
@@ -29,5 +29,5 @@ class Substitution(AjaxLoginView):
 
     @run_on_executor
     def work(self, txt):
-        ret = decrypt.decrypt(txt)
-        return ret
+        a, b = do_solve(txt)
+        return '\n\n'.join([a, b])

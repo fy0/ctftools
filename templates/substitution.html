@@ -15,9 +15,9 @@
     (function() {
 
         $("#caijie").click(function(){
+            $("#sub_ret").html('loading ...');
             $.post("${url_for('substitution')}", {txt: $("#ss_src").val()}, function(ret) {
-                console.log(ret);
-                $("#sub_ret").val(ret.msg);
+                $("#sub_ret").html(ret.msg);
             });
         })
 	})();

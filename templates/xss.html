@@ -1,5 +1,17 @@
+<!-- 野路子的 import -->
+<% from view.xss import js_txt, tip_text %>
+
 <div class="am-form">
     <p>地址：http://${req.request.host}/x?c=</p>
+    <p>JS地址：<a target="_blank" href="http://${req.request.host}${url_for('the_xss_js')}">http://${req.request.host}${url_for('the_xss_js')}</a></p>
+    <pre>${tip_text|h}</pre>
+
+    <div class="am-form-group">
+        <textarea id="js_txt" rows="4">${js_txt}</textarea>
+    </div>
+    <button id="js_reset" class="am-btn am-btn-secondary">重设JS内容</button>
+
+
     <ul id="xss_info">
 
     </ul>
@@ -8,6 +20,12 @@
 <%block name="script">
 <script>
     (function() {
+        $("#js_reset").click(function() {
+            $.post("${ url_for("j_xss_js_set") }", {js: $("#js_txt").val()}, function(ret) {
+                console.log(ret);
+            });
+        });
+
         setInterval(function() {
             $.get("${ url_for("xss_ret") }", function(ret) {
                 $("#xss_info").html(ret);
