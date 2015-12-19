@@ -35,23 +35,16 @@ def mos_encode(s):
     ret = []
     for i in s.upper():
         ret.append(MOS_CODE.get(i) or '?')
-    return ''.join(ret)
+    return '/'.join(ret)
 
 
-'''def mos_decode(s):
+def mos_decode(s):
     ret = []
-    while s:
-        find = False
-        for k, v in MOS_CODE.items():
-            if s.startswith(v):
-                ret.append(k)
-                find = True
-                s = s[len(v):]
-                break
-        if not find:
-            ret.append('?')
-            break
-    return ''.join(ret)'''
+    for i in s.split('/'):
+        chr = MOS_CODE_REV.get(i)
+        if chr == None: chr = '?'
+        ret.append(chr)
+    return ''.join(ret)
 
 
 def str_in(s):
@@ -62,7 +55,7 @@ def str_out(s):
     return str(s, 'utf-8')
 
 
-class DecodeView(AjaxLoginView):
+class EncodeView(AjaxLoginView):
     def compute(self, src):
         return {
             "source": src,
@@ -77,8 +70,8 @@ class DecodeView(AjaxLoginView):
         }
 
 
-@route('/j/decode/source', name='j_decode_source')
-class DecodeSource(DecodeView):
+@route('/j/encode/source', name='j_encode_source')
+class EncodeSource(EncodeView):
     def post(self):
         src = self.get_argument('source', '')
         if src:
@@ -87,8 +80,8 @@ class DecodeSource(DecodeView):
             self.finish({"code": -1})
 
 
-@route('/j/decode/base64', name='j_decode_base64')
-class DecodeSource(DecodeView):
+@route('/j/encode/base64', name='j_encode_base64')
+class EncodeSource(EncodeView):
     def post(self):
         b64 = self.get_argument('base64', '')
         try:
@@ -103,8 +96,8 @@ class DecodeSource(DecodeView):
             self.finish({"code": -1})
 
 
-@route('/j/decode/hex', name='j_decode_hex')
-class DecodeSource(DecodeView):
+@route('/j/encode/hex', name='j_encode_hex')
+class EncodeSource(EncodeView):
     def post(self):
         hex = self.get_argument('hex', '')
         try:
@@ -119,8 +112,8 @@ class DecodeSource(DecodeView):
             self.finish({"code": -1})
 
 
-@route('/j/decode/hex2', name='j_decode_hex2')
-class DecodeSource(DecodeView):
+@route('/j/encode/hex2', name='j_encode_hex2')
+class EncodeSource(EncodeView):
     def post(self):
         hex = self.get_argument('hex2', '')
         try:
@@ -135,8 +128,8 @@ class DecodeSource(DecodeView):
             self.finish({"code": -1})
 
 
-@route('/j/decode/utf7', name='j_decode_utf7')
-class DecodeSource(DecodeView):
+@route('/j/encode/utf7', name='j_encode_utf7')
+class EncodeSource(EncodeView):
     def post(self):
         u7 = self.get_argument('utf7', '')
         try:
@@ -151,8 +144,8 @@ class DecodeSource(DecodeView):
             self.finish({"code": -1})
 
 
-@route('/j/decode/quote', name='j_decode_quote')
-class DecodeSource(DecodeView):
+@route('/j/encode/quote', name='j_encode_quote')
+class EncodeSource(EncodeView):
     def post(self):
         quote = self.get_argument('quote', '')
         try:
@@ -162,6 +155,22 @@ class DecodeSource(DecodeView):
         if src:
             ret = self.compute(src)
             ret["quote"] = quote
+            self.finish(json.dumps(ret))
+        else:
+            self.finish({"code": -1})
+
+
+@route('/j/encode/morse', name='j_encode_morse')
+class EncodeSource(EncodeView):
+    def post(self):
+        val = self.get_argument('morse', '')
+        try:
+            src = mos_decode(val)
+        except:
+            src = None
+        if src:
+            ret = self.compute(src)
+            ret["morse"] = val
             self.finish(json.dumps(ret))
         else:
             self.finish({"code": -1})

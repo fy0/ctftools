@@ -40,10 +40,30 @@
         <textarea id="dc_quote" v-model="quote"></textarea>
     </div>
 
-    <!--<div class="am-form-group">
+    <div class="am-form-group">
         <label for="dc_mos">morse</label>
         <textarea id="dc_mos" v-model="morse"></textarea>
-    </div>-->
+    </div>
+
+    <div class="am-form-group">
+        <label for="dc_base16">base16</label>
+        <textarea id="dc_base16" v-model="base16"></textarea>
+    </div>
+
+    <div class="am-form-group">
+        <label for="dc_base32">base32</label>
+        <textarea id="dc_base32" v-model="base32"></textarea>
+    </div>
+
+    <div class="am-form-group">
+        <label for="dc_base85">base85</label>
+        <textarea id="dc_base85" v-model="base85"></textarea>
+    </div>
+
+    <div class="am-form-group">
+        <label for="dc_ascii85">ascii85</label>
+        <textarea id="dc_ascii85" v-model="ascii85"></textarea>
+    </div>
 
 </div>
 
@@ -53,7 +73,7 @@
     (function() {
         var the_data = {};
         var last_ret = {};
-        var items = ["source", "base64", "hex", "hex2", "utf7", "quote", "md5", "rot13", "unicode_escape", "morse"];
+        var items = ["source", "base64", "hex", "hex2", "utf7", "quote", "md5", "rot13", "unicode_escape", "morse", "base16", "base32", "base85", "ascii85"];
 
         $.mypost = function(self, url, key, val) {
             params = {}
@@ -84,12 +104,17 @@
                 md5: the_data.md5,
                 rot13: the_data.rot13,
                 unicode_escape: the_data.unicode_escape,
+                base16: the_data.base16,
+                base32: the_data.base32,
+                base85: the_data.base85,
+                ascii85: the_data.ascii85,
             },
+
             watch: {
                 source: function (val, oldVal) {
                     key = "source";
                     if (val != last_ret[key]) {
-                        $.mypost(this, "${ url_for('j_decode_test') }", key, val);
+                        $.mypost(this, "${ url_for('j_decode_try') }", key, val);
                     }
                 }
             },

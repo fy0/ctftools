@@ -1,7 +1,7 @@
 # coding:utf-8
 import json
 
-PORT = 9000
+PORT = 8081
 DEBUG = True
 TITLE = 'ctftool'
 TEMPLATE = 'mako'  # jinja2/mako/tornado

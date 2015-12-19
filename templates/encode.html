@@ -82,37 +82,37 @@
                 source: function (val, oldVal) {
                     key = "source";
                     if (val != last_ret[key]) {
-                        $.mypost(this, "${ url_for('j_decode_source') }", key, val);
+                        $.mypost(this, "${ url_for('j_encode_source') }", key, val);
                     }
                 },
                 base64: function (val, oldVal) {
                     key = "base64";
                     if (val != last_ret[key]) {
-                        $.mypost(this, "${ url_for('j_decode_base64') }", key, val);
+                        $.mypost(this, "${ url_for('j_encode_base64') }", key, val);
                     }
                 },
                 hex: function (val, oldVal) {
                     key = "hex";
                     if (val != last_ret[key]) {
-                        $.mypost(this, "${ url_for('j_decode_hex') }", key, val);
+                        $.mypost(this, "${ url_for('j_encode_hex') }", key, val);
                     }
                 },
                 hex2: function (val, oldVal) {
                     key = "hex2";
                     if (val != last_ret[key]) {
-                        $.mypost(this, "${ url_for('j_decode_hex2') }", key, val);
+                        $.mypost(this, "${ url_for('j_encode_hex2') }", key, val);
                     }
                 },
                 utf7: function (val, oldVal) {
                     key = "utf7";
                     if (val != last_ret[key]) {
-                        $.mypost(this, "${ url_for('j_decode_utf7') }", key, val);
+                        $.mypost(this, "${ url_for('j_encode_utf7') }", key, val);
                     }
                 },
                 quote: function (val, oldVal) {
                     key = "quote";
                     if (val != last_ret[key]) {
-                        $.mypost(this, "${ url_for('j_decode_quote') }", key, val);
+                        $.mypost(this, "${ url_for('j_encode_quote') }", key, val);
                     }
                 },
             },
