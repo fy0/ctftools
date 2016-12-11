@@ -11,7 +11,7 @@ import view.views
 import model.models
 from view import route
 from view.chat import chat_route
-
+from view.socket import ChatServer
 
 application = tornado.web.Application(
     route.urls + chat_route.urls,
@@ -28,6 +28,8 @@ if __name__ == "__main__":
     if len(argv) > 1 and  argv[1][:6] == '-port=':
         config.PORT = int(argv[1][6:])
 
+    chat = ChatServer()
+    chat.listen(8887)
     application.listen(config.PORT)
     print('Server started at port %s' % config.PORT)
     tornado.ioloop.IOLoop.instance().start()
